@@ -17,5 +17,7 @@
             "email": "MatthewGagnon.Software@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+      "ext-curl": "*"
+    }
 }
