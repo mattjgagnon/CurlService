@@ -14,6 +14,11 @@ final class CurlService
         $this->setOption(CURLOPT_RETURNTRANSFER, true);
     }
 
+    public function close(): void
+    {
+        curl_close($this->curlHandle);
+    }
+
     public function get(): string
     {
         $this->setOption(CURLOPT_HTTPGET, true);

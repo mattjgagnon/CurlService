@@ -15,6 +15,7 @@ final class CurlServiceTest extends TestCase
 
         // act
         $response = $curl->get();
+        $curl->close();
 
         // assert
         $this->assertIsString($response);
@@ -31,6 +32,7 @@ final class CurlServiceTest extends TestCase
 
         // act
         $response = $curl->post($jsonPayload);
+        $curl->close();
 
         // assert
         $this->assertIsString($response);
