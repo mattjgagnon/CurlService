@@ -2,19 +2,34 @@
 
 namespace Mattjgagnon\CurlService;
 
+use CurlHandle;
+
 final class CurlService
 {
+    private readonly CurlHandle $curlHandle;
+
     public function __construct(public string $url = '')
     {
-        if (!empty($this->url)) {
-            curl_init($this->url);
-        } else {
-            curl_init();
-        }
+        $this->init();
     }
 
-    public function get()
+    public function get(): string
     {
+        $response = curl_exec($this->curlHandle);
 
+        if ($responseJson = json_encode($response)) {
+            return $responseJson;
+        }
+
+        return '';
+    }
+
+    private function init(): void
+    {
+        if (!empty($this->url)) {
+            $this->curlHandle = curl_init($this->url);
+        } else {
+            $this->curlHandle = curl_init();
+        }
     }
 }
