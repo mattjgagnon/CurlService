@@ -1,0 +1,21 @@
+{
+    "name": "mattjgagnon/curl-service",
+    "description": "An object-oriented and easy to use wrapper around cUrl for PHP",
+    "type": "library",
+    "require-dev": {
+        "phpunit/phpunit": "^11.1"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Mattjgagnon\\CurlService\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Matthew Gagnon",
+            "email": "MatthewGagnon.Software@gmail.com"
+        }
+    ],
+    "require": {}
+}
