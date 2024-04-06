@@ -33,6 +33,11 @@ final class CurlServiceTest extends TestCase
     {
         // assemble
         $curl = new CurlService($url);
+        $curl->setOptions([
+            CURLOPT_HTTPHEADER => [
+                'Content-Type: application/json',
+            ],
+        ]);
         $payload = [
             'key1' => 'value1',
         ];

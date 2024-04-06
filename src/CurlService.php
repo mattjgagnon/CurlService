@@ -52,6 +52,11 @@ final class CurlService
         curl_setopt($this->curlHandle, $option, $value);
     }
 
+    public function setOptions(array $options): bool
+    {
+        return curl_setopt_array($this->curlHandle, $options);
+    }
+
     private function execute(): string
     {
         $results = curl_exec($this->curlHandle);
