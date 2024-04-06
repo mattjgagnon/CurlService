@@ -30,6 +30,11 @@ final class CurlService
         return curl_errno($this->curlHandle);
     }
 
+    public function getError(): string
+    {
+        return curl_error($this->curlHandle);
+    }
+
     public function getInfo(?int $option = null): mixed
     {
         return curl_getinfo($this->curlHandle, $option);

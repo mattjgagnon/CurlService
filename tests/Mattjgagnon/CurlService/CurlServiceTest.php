@@ -18,6 +18,7 @@ final class CurlServiceTest extends TestCase
         $curl->close();
         $code = $curl->getInfo(CURLINFO_HTTP_CODE);
         $info = $curl->getInfo();
+        $error = $curl->getError();
 
         // assert
         $this->assertIsString($response);
@@ -25,6 +26,7 @@ final class CurlServiceTest extends TestCase
         $this->assertIsArray($info);
         $this->assertArrayHasKey('http_code', $info);
         $this->assertArrayHasKey('url', $info);
+        $this->assertIsString($error);
     }
 
     #[DataProvider('urlProvider')] #[Test] public function it_makes_a_post_request($url)
