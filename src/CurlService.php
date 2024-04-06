@@ -25,6 +25,11 @@ final class CurlService
         return $this->execute();
     }
 
+    public function getErrNo(): int
+    {
+        return curl_errno($this->curlHandle);
+    }
+
     public function getInfo(?int $option = null): mixed
     {
         return curl_getinfo($this->curlHandle, $option);

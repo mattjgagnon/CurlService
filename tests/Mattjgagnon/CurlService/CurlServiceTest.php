@@ -39,9 +39,11 @@ final class CurlServiceTest extends TestCase
         // act
         $response = $curl->post($jsonPayload);
         $curl->close();
+        $errNo = $curl->getErrNo();
 
         // assert
         $this->assertIsString($response);
+        $this->assertIsInt($errNo);
     }
 
     public static function urlProvider(): array
