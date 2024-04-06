@@ -3,6 +3,7 @@
 namespace Mattjgagnon\CurlService;
 
 use CurlHandle;
+use InvalidArgumentException;
 
 final class CurlService
 {
@@ -55,6 +56,15 @@ final class CurlService
     public function setOptions(array $options): bool
     {
         return curl_setopt_array($this->curlHandle, $options);
+    }
+
+    public function setUrl(string $url): void
+    {
+        if (!filter_var($url, FILTER_VALIDATE_URL)) {
+            throw new InvalidArgumentException('Invalid URL');
+        }
+
+        $this->url = $url;
     }
 
     private function execute(): string

@@ -12,6 +12,8 @@ final class CurlServiceTest extends TestCase
     {
         // assemble
         $curl = new CurlService($url);
+        // I realize this is redundant from above, but need to test setter
+        $curl->setUrl($url);
 
         // act
         $response = $curl->get();
@@ -57,7 +59,7 @@ final class CurlServiceTest extends TestCase
     {
         return [
             ['https://example.com/'],
-            [''],
+            ['https://example.com/foo/'],
         ];
     }
 }
