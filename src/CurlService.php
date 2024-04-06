@@ -25,6 +25,11 @@ final class CurlService
         return $this->execute();
     }
 
+    public function getInfo(?int $option = null): mixed
+    {
+        return curl_getinfo($this->curlHandle, $option);
+    }
+
     public function post(string $payload): string
     {
         $this->setOption(CURLOPT_POST, true);
