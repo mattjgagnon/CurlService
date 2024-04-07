@@ -68,6 +68,18 @@ final class CurlServiceTest extends TestCase
         $curl->setUrl('kjhfyr:iu7987tg');
     }
 
+    #[Test] public function it_makes_an_options_request() {
+        // assemble
+        $url = 'https://example.com';
+        $curl = new CurlService($url);
+
+        // act
+        $response = $curl->options();
+
+        // assert
+        $this->assertIsString($response);
+    }
+
     #[DataProvider('urlProvider')] #[Test] public function it_makes_a_post_request($url)
     {
         // assemble

@@ -53,6 +53,12 @@ final class CurlService
         return $this->execute();
     }
 
+    public function options(): string
+    {
+        $this->setOption(CURLOPT_CUSTOMREQUEST, 'OPTIONS');
+        return $this->execute();
+    }
+
     public function post(string $payload): string
     {
         $this->setOption(CURLOPT_POST, true);
