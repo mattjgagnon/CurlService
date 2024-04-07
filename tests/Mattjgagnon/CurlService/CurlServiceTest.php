@@ -46,6 +46,20 @@ final class CurlServiceTest extends TestCase
         $this->assertIsString($error);
     }
 
+    #[Test] public function it_makes_a_head_request()
+    {
+        // assemble
+        $url = 'https://example.org/head/1';
+        $curl = new CurlService($url);
+
+        // act
+        $response = $curl->head();
+        $curl->close();
+
+        // assert
+        $this->assertIsString($response);
+    }
+
     #[Test] public function a_get_request_with_an_invalid_url_throws_exception()
     {
         // assemble

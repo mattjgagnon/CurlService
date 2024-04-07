@@ -47,6 +47,12 @@ final class CurlService
         return curl_getinfo($this->curlHandle, $option);
     }
 
+    public function head(): string
+    {
+        $this->setOption(CURLOPT_NOBODY, true);
+        return $this->execute();
+    }
+
     public function post(string $payload): string
     {
         $this->setOption(CURLOPT_POST, true);
