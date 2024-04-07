@@ -9,6 +9,20 @@ use PHPUnit\Framework\TestCase;
 
 final class CurlServiceTest extends TestCase
 {
+    #[Test] public function it_makes_a_delete_request()
+    {
+        // assemble
+        $url = 'https://example.org/delete/1';
+        $curl = new CurlService($url);
+
+        // act
+        $response = $curl->delete();
+        $curl->close();
+
+        // assert
+        $this->assertIsString($response);
+    }
+
     #[DataProvider('urlProvider')] #[Test] public function it_makes_a_get_request($url)
     {
         // assemble

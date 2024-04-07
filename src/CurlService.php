@@ -20,6 +20,12 @@ final class CurlService
         curl_close($this->curlHandle);
     }
 
+    public function delete(): string
+    {
+        $this->setOption(CURLOPT_CUSTOMREQUEST, 'DELETE');
+        return $this->execute();
+    }
+
     public function get(): string
     {
         $this->setOption(CURLOPT_HTTPGET, true);
