@@ -48,6 +48,13 @@ final class CurlService
         return $this->execute();
     }
 
+    public function put(string $payload): string
+    {
+        $this->setOption(CURLOPT_PUT, true);
+        $this->setOption(CURLOPT_POSTFIELDS, $payload);
+        return $this->execute();
+    }
+
     public function setOption(int $option, mixed $value): void
     {
         curl_setopt($this->curlHandle, $option, $value);

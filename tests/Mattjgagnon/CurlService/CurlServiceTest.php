@@ -2,6 +2,7 @@
 
 namespace Mattjgagnon\CurlService;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -31,6 +32,14 @@ final class CurlServiceTest extends TestCase
         $this->assertIsString($error);
     }
 
+    #[Test] public function a_get_request_with_an_invalid_url_throws_exception()
+    {
+        // assemble
+        $curl = new CurlService();
+        $this->expectException(InvalidArgumentException::class);
+        $curl->setUrl('kjhfyr:iu7987tg');
+    }
+
     #[DataProvider('urlProvider')] #[Test] public function it_makes_a_post_request($url)
     {
         // assemble
@@ -53,6 +62,25 @@ final class CurlServiceTest extends TestCase
         // assert
         $this->assertIsString($response);
         $this->assertIsInt($errNo);
+    }
+
+    #[Test] public function it_makes_a_put_request()
+    {
+        // assemble
+        $url = 'https://example.com/put';
+        $curl = new CurlService();
+        $curl->setUrl($url);
+        $payload = [
+            'key1' => 'value1',
+        ];
+        $jsonPayload = json_encode($payload);
+
+        // act
+        $response = $curl->put($jsonPayload);
+        $curl->close();
+
+        // assert
+        $this->assertIsString($response);
     }
 
     public static function urlProvider(): array
