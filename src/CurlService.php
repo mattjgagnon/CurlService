@@ -116,15 +116,9 @@ final class CurlService
         $this->url = $url;
     }
 
-    private function execute(): string
+    private function execute(): bool|string
     {
-        $results = curl_exec($this->curlHandle);
-
-        if ($responseJson = json_encode($results)) {
-            $response = $responseJson;
-        }
-
-        return $response ?? '';
+        return curl_exec($this->curlHandle);
     }
 
     private function init(): void
