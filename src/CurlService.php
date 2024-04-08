@@ -9,8 +9,11 @@ final class CurlService
 {
     private readonly CurlHandle $curlHandle;
 
-    public function __construct(public string $url = '')
-    {
+    public function __construct(
+        public string $url = '',
+        private int $maxAttempts = 3,
+        private int $initialBackoff = 3
+    ) {
         $this->init();
         $this->setOption(CURLOPT_RETURNTRANSFER, true);
     }
@@ -23,13 +26,13 @@ final class CurlService
     public function delete(): string
     {
         $this->setOption(CURLOPT_CUSTOMREQUEST, 'DELETE');
-        return $this->execute();
+        return $this->retry();
     }
 
     public function get(): string
     {
         $this->setOption(CURLOPT_HTTPGET, true);
-        return $this->execute();
+        return $this->retry();
     }
 
     public function getErrNo(): int
@@ -50,27 +53,36 @@ final class CurlService
     public function head(): string
     {
         $this->setOption(CURLOPT_NOBODY, true);
-        return $this->execute();
+        return $this->retry();
     }
 
     public function options(): string
     {
         $this->setOption(CURLOPT_CUSTOMREQUEST, 'OPTIONS');
-        return $this->execute();
+        return $this->retry();
     }
 
     public function post(string $payload): string
     {
         $this->setOption(CURLOPT_POST, true);
         $this->setOption(CURLOPT_POSTFIELDS, $payload);
-        return $this->execute();
+        return $this->retry();
     }
 
     public function put(string $payload): string
     {
         $this->setOption(CURLOPT_PUT, true);
         $this->setOption(CURLOPT_POSTFIELDS, $payload);
-        return $this->execute();
+        return $this->retry();
+    }
+
+    public function setInitialBackoff(int $initialBackoff): void
+    {
+        if ($initialBackoff < 1) {
+            throw new InvalidArgumentException('Initial backoff must be a positive number');
+        }
+
+        $this->initialBackoff = $initialBackoff;
     }
 
     public function setOption(int $option, mixed $value): void
@@ -81,6 +93,15 @@ final class CurlService
     public function setOptions(array $options): bool
     {
         return curl_setopt_array($this->curlHandle, $options);
+    }
+
+    public function setMaxAttempts(int $attempts): void
+    {
+        if ($attempts < 1) {
+            throw new InvalidArgumentException('Maximum number of attempts must be a positive number');
+        }
+
+        $this->maxAttempts = $attempts;
     }
 
     public function setUrl(string $url): void
@@ -110,5 +131,26 @@ final class CurlService
         } else {
             $this->curlHandle = curl_init();
         }
+    }
+
+    private function retry(): string
+    {
+        $attempt = 0;
+
+        while ($attempt < $this->maxAttempts) {
+            $response = $this->execute();
+            $statusCode = $this->getInfo(CURLINFO_HTTP_CODE);
+            $this->close();
+
+            if ($statusCode < 400) {
+                return $response;
+            }
+
+            $backoff = $this->initialBackoff * (2 ** $attempt);
+            usleep($backoff * 1000);
+            $attempt++;
+        }
+
+        return '';
     }
 }

@@ -26,9 +26,11 @@ final class CurlServiceTest extends TestCase
     #[DataProvider('urlProvider')] #[Test] public function it_makes_a_get_request($url)
     {
         // assemble
-        $curl = new CurlService($url);
+        $curl = new CurlService($url, 1, 3);
         // I realize this is redundant from above, but need to test setter
         $curl->setUrl($url);
+        $curl->setMaxAttempts(2);
+        $curl->setInitialBackoff(4);
 
         // act
         $response = $curl->get();
@@ -121,6 +123,22 @@ final class CurlServiceTest extends TestCase
 
         // assert
         $this->assertIsString($response);
+    }
+
+    #[Test] public function a_get_request_with_an_invalid_max_attempts_throws_exception()
+    {
+        // assemble
+        $curl = new CurlService();
+        $this->expectException(InvalidArgumentException::class);
+        $curl->setMaxAttempts(-1);
+    }
+
+    #[Test] public function a_get_request_with_an_invalid_initial_backoff_throws_exception()
+    {
+        // assemble
+        $curl = new CurlService();
+        $this->expectException(InvalidArgumentException::class);
+        $curl->setInitialBackoff(-1);
     }
 
     public static function urlProvider(): array
