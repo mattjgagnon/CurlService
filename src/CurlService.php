@@ -154,6 +154,9 @@ final class CurlService
             $attempt++;
         }
 
+        $error = "Failed to fetch data from {$this->url} after {$this->maxAttempts} attempts. ";
+        $error .= "Response code: {$statusCode}. Response body: {$response}";
+        echo $error . PHP_EOL;
         return '';
     }
 }
