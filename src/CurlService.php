@@ -7,6 +7,9 @@ use InvalidArgumentException;
 
 final class CurlService
 {
+    private const MSG_ATTEMPTS = 'Maximum number of attempts must be a positive number';
+    private const MSG_BACKOFF = 'Initial backoff must be a positive number';
+    private const MSG_URL = 'Invalid URL';
     private readonly CurlHandle $curlHandle;
 
     public function __construct(
@@ -79,7 +82,7 @@ final class CurlService
     public function setInitialBackoff(int $initialBackoff): void
     {
         if ($initialBackoff < 1) {
-            throw new InvalidArgumentException('Initial backoff must be a positive number');
+            throw new InvalidArgumentException(self::MSG_BACKOFF);
         }
 
         $this->initialBackoff = $initialBackoff;
@@ -98,7 +101,7 @@ final class CurlService
     public function setMaxAttempts(int $attempts): void
     {
         if ($attempts < 1) {
-            throw new InvalidArgumentException('Maximum number of attempts must be a positive number');
+            throw new InvalidArgumentException(self::MSG_ATTEMPTS);
         }
 
         $this->maxAttempts = $attempts;
@@ -107,7 +110,7 @@ final class CurlService
     public function setUrl(string $url): void
     {
         if (!filter_var($url, FILTER_VALIDATE_URL)) {
-            throw new InvalidArgumentException('Invalid URL');
+            throw new InvalidArgumentException(self::MSG_URL);
         }
 
         $this->url = $url;
