@@ -3,7 +3,6 @@
 namespace Mattjgagnon\CurlService;
 
 use InvalidArgumentException;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -20,9 +19,10 @@ final class CurlServiceTest extends TestCase
         $curl->delete();
     }
 
-    #[DataProvider('urlProvider')] #[Test] public function it_makes_a_get_request($url)
+    #[Test] public function it_makes_a_get_request()
     {
         // assemble
+        $url = 'https://example.org';
         $curl = new CurlService($url, 1, 3);
         // I realize this is redundant from above, but need to test setter
         $curl->setUrl($url);
@@ -76,9 +76,10 @@ final class CurlServiceTest extends TestCase
         $this->assertIsString($response);
     }
 
-    #[DataProvider('urlProvider')] #[Test] public function it_makes_a_post_request($url)
+    #[Test] public function it_makes_a_post_request()
     {
         // assemble
+        $url = 'https://example.org';
         $curl = new CurlService($url);
         $curl->setOptions([
             CURLOPT_HTTPHEADER => [
@@ -103,7 +104,7 @@ final class CurlServiceTest extends TestCase
     #[Test] public function it_makes_a_put_request()
     {
         // assemble
-        $url = 'https://example.com/put';
+        $url = 'https://example.org/put';
         $curl = new CurlService();
         $curl->setUrl($url);
         $payload = [
@@ -133,12 +134,5 @@ final class CurlServiceTest extends TestCase
         $curl = new CurlService();
         $this->expectException(InvalidArgumentException::class);
         $curl->setInitialBackoff(-1);
-    }
-
-    public static function urlProvider(): array
-    {
-        return [
-            ['https://example.com/'],
-        ];
     }
 }
