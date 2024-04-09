@@ -4,6 +4,7 @@ namespace Mattjgagnon\CurlService;
 
 use CurlHandle;
 use InvalidArgumentException;
+use RuntimeException;
 
 final class CurlService
 {
@@ -130,9 +131,14 @@ final class CurlService
         }
     }
 
+    /**
+     * @throws RuntimeException
+     */
     private function retry(): string
     {
         $attempt = 0;
+        $statusCode = 0;
+        $response = '';
 
         while ($attempt < $this->maxAttempts) {
             $response = $this->execute();
@@ -150,7 +156,6 @@ final class CurlService
 
         $error = "Failed to fetch data from {$this->url} after {$this->maxAttempts} attempts. ";
         $error .= "Response code: {$statusCode}. Response body: {$response}";
-        echo $error . PHP_EOL;
-        return '';
+        throw new RuntimeException($error);
     }
 }
