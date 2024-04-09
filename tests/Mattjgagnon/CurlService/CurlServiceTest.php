@@ -6,7 +6,6 @@ use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 
 final class CurlServiceTest extends TestCase
 {
@@ -15,10 +14,10 @@ final class CurlServiceTest extends TestCase
         // assemble
         $url = 'https://example.org/delete/1';
         $curl = new CurlService($url);
-        $this->expectException(RuntimeException::class);
+        $this->expectException(CurlRetryException::class);
 
         // act
-        $response = $curl->delete();
+        $curl->delete();
     }
 
     #[DataProvider('urlProvider')] #[Test] public function it_makes_a_get_request($url)
@@ -51,10 +50,10 @@ final class CurlServiceTest extends TestCase
         // assemble
         $url = 'https://example.org/head/1';
         $curl = new CurlService($url);
-        $this->expectException(RuntimeException::class);
+        $this->expectException(CurlRetryException::class);
 
         // act
-        $response = $curl->head();
+        $curl->head();
     }
 
     #[Test] public function a_get_request_with_an_invalid_url_throws_exception()
